@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Validator {
-    private Map<String, Function<String, Boolean>> functionalMap;
+    private Map<String, Function<String, Pattern>> functionalMap;
     private static final String NATURAL_REGEX_STRING = "([0]{1})|([1-9]\\d*)";
     private static final String INTEGER_REGEX_STRING = "((-?)[1-9]\\d*)|([0]{1})";
     private static final String FLOAT_REGEX_STRING = "[+-]?\\d*(([.]?\\d+)?)(([Ee][+-]?\\d*)?)";
@@ -23,18 +23,18 @@ public class Validator {
     private Matcher matcher;
     public Validator() {
         functionalMap = new HashMap<>();
-        functionalMap.put("natural", (x) -> Pattern.compile(NATURAL_REGEX_STRING).matcher(x).matches());
-        functionalMap.put("integer", (x) -> Pattern.compile(INTEGER_REGEX_STRING).matcher(x).matches());
-        functionalMap.put("float", (x) -> Pattern.compile(FLOAT_REGEX_STRING).matcher(x).matches());
-        functionalMap.put("date", (x) -> Pattern.compile(DATE_REGEX_STRING).matcher(x).matches());
-        functionalMap.put("time", (x) -> Pattern.compile(TIME_REGEX_STRING).matcher(x).matches());
-        functionalMap.put("e-mail", (x) -> Pattern.compile(EMAIL_REGEX_STRING).matcher(x).matches());
+        functionalMap.put("natural", (x) -> Pattern.compile(NATURAL_REGEX_STRING));
+        functionalMap.put("integer", (x) -> Pattern.compile(INTEGER_REGEX_STRING));
+        functionalMap.put("float", (x) -> Pattern.compile(FLOAT_REGEX_STRING));
+        functionalMap.put("date", (x) -> Pattern.compile(DATE_REGEX_STRING));
+        functionalMap.put("time", (x) -> Pattern.compile(TIME_REGEX_STRING));
+        functionalMap.put("e-mail", (x) -> Pattern.compile(EMAIL_REGEX_STRING));
     }
 
     public boolean isValid(String requestString, String mode) throws IllegalArgumentException {
         if (!functionalMap.containsKey(mode.toLowerCase()))
             throw new IllegalArgumentException("No such mode found");
 
-        return functionalMap.get(mode.toLowerCase()).apply(requestString);
+        return functionalMap.get(mode.toLowerCase()).apply(requestString).matcher(requestString).matches();
     }
 }
