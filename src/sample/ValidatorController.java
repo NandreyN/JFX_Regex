@@ -16,7 +16,7 @@ import javafx.scene.input.InputMethodEvent;
 
 import java.util.concurrent.Callable;
 
-public class Controller {
+public class ValidatorController {
     @FXML
     private ComboBox<String> comboBox;
     @FXML
@@ -30,7 +30,7 @@ public class Controller {
     private Image success, error;
     private Validator validator;
 
-    public Controller() {
+    public ValidatorController() {
         flag = new SimpleBooleanProperty();
         validator = new Validator();
         error = new Image(getClass().getResourceAsStream("resources/error.png"));
