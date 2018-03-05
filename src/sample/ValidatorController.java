@@ -14,6 +14,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.InputMethodEvent;
 
+import javax.naming.Binding;
 import java.util.concurrent.Callable;
 
 public class ValidatorController {
@@ -40,10 +41,13 @@ public class ValidatorController {
     @FXML
     private void initialize() {
         imageIndicator.imageProperty().bind(Bindings.when(flag).then(success).otherwise(error));
-
         comboBoxValues = comboBox.getItems();
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             flag.setValue(validator.isValid(newValue, comboBox.getSelectionModel().getSelectedItem()));
+        });
+
+        comboBox.valueProperty().addListener(x -> {
+            flag.setValue(validator.isValid(textField.getText(), comboBox.getSelectionModel().getSelectedItem()));
         });
     }
 }
